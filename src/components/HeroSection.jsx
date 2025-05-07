@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import heroImage from '../assets/herobg.png'
+import heroImage from '../assets/heroimage.png'
+import flowerImage from '../assets/flower.png'
 import { motion } from 'framer-motion'
 
 const weddingDate = new Date('2025-08-03T00:00:00')
@@ -43,38 +44,63 @@ const HeroSection = () => {
 	}, [])
 
 	return (
-		<section className='w-full h-screen bg-white relative overflow-hidden flex flex-col items-center justify-center text-center px-4'>
-			{/* Фото в кастомной форме (примерная SVG-кривая через clip-path) */}
-			<div
-				className='relative w-[300px] h-[400px] bg-white overflow-hidden mb-6'
-				style={{
-					WebkitClipPath:
-						'path("M 0 100 Q 40 0, 100 40 Q 160 80, 180 140 Q 200 200, 150 280 Q 100 360, 40 320 Q 0 280, 0 200 Z")',
-					clipPath:
-						'path("M 0 100 Q 40 0, 100 40 Q 160 80, 180 140 Q 200 200, 150 280 Q 100 360, 40 320 Q 0 280, 0 200 Z")',
-				}}
+		<section className='w-full h-screen bg-white relative overflow-hidden px-4 flex flex-col'>
+			<img
+				src={flowerImage}
+				alt='hero'
+				className='transform scale-x-[-1] block ml-[-100px] rotate-70 w-50'
+			/>
+
+			{/* Background numbers */}
+			<motion.div
+				initial={{ opacity: 0, x: -100 }}
+				whileInView={{ opacity: 0.15, x: 0 }}
+				viewport={{ once: true }}
+				transition={{ duration: 0.8, ease: 'easeOut' }}
+				className='font-[PassionsConflict] absolute right-0 text-gray-700 text-[200px] font-light leading-none select-none pointer-events-none top-[-40px]'
 			>
-				<motion.img
-					src={heroImage}
-					alt='wedding hero'
-					className='w-full h-full object-cover scale-110'
-					initial={{ opacity: 0, scale: 0.9 }}
-					animate={{ opacity: 1, scale: 1.1 }}
-					transition={{ duration: 1 }}
-				/>
-			</div>
+				<motion.div
+					initial={{ y: 50 }}
+					whileInView={{ y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.5, delay: 0.1 }}
+					className='pl-4'
+				>
+					Д
+				</motion.div>
+				<motion.div
+					initial={{ y: 50 }}
+					whileInView={{ y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.5, delay: 0.2 }}
+					className='pl-30 mt-[-130px]'
+				>
+					Э
+				</motion.div>
+			</motion.div>
+
+			{/* Фото в жидкой форме (liquid SVG clipPath, как на референсе) */}
+			<img
+				src={heroImage}
+				alt='hero'
+				className='object-contain mb-[-80px] mt-[-150px]'
+			/>
 			{/* Имена */}
 			<motion.h1
-				className='text-5xl sm:text-6xl font-[PassionsConflict] text-gray-800 mb-2'
+				className='text-6xl sm:text-9xl font-[PassionsConflict] text-gray-800'
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8 }}
 			>
-				Дмитрий & Элина
+				Дмитрий <br /> <span className='ml-20'>и Элина</span>
 			</motion.h1>
-			<p className='text-xl text-gray-600 tracking-widest'>Wedding Day</p>
+
+			<p className='text-sm text-gray-600 tracking-widest text-center mt-10 font-[Involve] mb-2'>
+				До начала свадьбы осталось
+			</p>
+
 			{/* Таймер */}
-			<div className='mt-8 flex gap-4'>
+			<div className='flex gap-4 justify-center'>
 				{Object.entries(timeLeft).map(([unit, value]) => (
 					<div key={unit} className='flex flex-col items-center w-16'>
 						<span className='text-3xl font-semibold text-gray-800'>
