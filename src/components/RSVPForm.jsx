@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+// убедись, что путь к ../firebase указывает на инициализированный Firebase app
 import { db } from '../firebase' // убедись, что путь к firebase.js правильный
 import { collection, addDoc } from 'firebase/firestore'
 import { motion } from 'framer-motion'
@@ -11,6 +12,7 @@ const RSVPForm = () => {
 	})
 
 	const [submitted, setSubmitted] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target
@@ -32,8 +34,11 @@ const RSVPForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
+			setLoading(true)
 			await addDoc(collection(db, 'rsvp_responses'), formData)
 			setSubmitted(true)
+			setFormData({ name: '', attendance: '', drinks: [] })
+			setLoading(false)
 		} catch (error) {
 			console.error('Ошибка при отправке:', error)
 			alert('Произошла ошибка при отправке данных.')
@@ -138,7 +143,9 @@ const RSVPForm = () => {
 			</motion.div>
 
 			<motion.div variants={itemVariants}>
-				<p className='font-medium mb-2'>Ваши предпочтения по напиткам</p>
+				<p className='font-medium mb-2'>
+					Ваши предпочтения по напиткам (можно выбрать несколько)
+				</p>
 				{[
 					'Вино красное',
 					'Вино белое',
@@ -146,6 +153,7 @@ const RSVPForm = () => {
 					'Виски',
 					'Коньяк',
 					'Водка',
+					'Безалкогольные напитки',
 				].map((drink) => (
 					<motion.label
 						key={drink}
@@ -170,9 +178,10 @@ const RSVPForm = () => {
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
 				type='submit'
-				className='w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition'
+				disabled={submitted || loading}
+				className='w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed'
 			>
-				Отправить
+				{loading ? 'Отправка...' : 'Отправить'}
 			</motion.button>
 		</motion.form>
 	)
